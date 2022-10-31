@@ -1,38 +1,31 @@
 {
   "schemaVersion": 1,
-  "id": "modid",
+  "id": "bookly",
   "version": "${version}",
-
-  "name": "Example Mod",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "name": "Bookly",
+  "description": "A mod for my survival worlds",
   "authors": [
-    "Me!"
+    "Fabien2S"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "homepage": "https://github.com/Fabien2S/bookly",
+    "sources": "https://github.com/Fabien2S/bookly"
   },
-
   "license": "CC0-1.0",
-  "icon": "assets/modid/icon.png",
-
-  "environment": "*",
+  "icon": "assets/bookly/icon.png",
+  "environment": "server",
   "entrypoints": {
     "main": [
-      "net.fabricmc.example.ExampleMod"
+      "dev.fabien2s.bookly.BooklyMod"
     ]
   },
   "mixins": [
-    "modid.mixins.json"
+    "bookly.mixins.json"
   ],
-
   "depends": {
     "fabricloader": ">=0.14.9",
     "fabric-api": "*",
     "minecraft": "~1.19",
     "java": ">=17"
-  },
-  "suggests": {
-    "another-mod": "*"
   }
 }
