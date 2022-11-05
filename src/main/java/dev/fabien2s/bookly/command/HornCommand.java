@@ -2,6 +2,8 @@ package dev.fabien2s.bookly.command;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.FloatArgumentType;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import dev.fabien2s.bookly.util.InstrumentMap;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -28,9 +30,32 @@ public final class HornCommand {
                             ServerPlayer player = source.getPlayerOrException();
 
                             ResourceLocation soundLocation = ResourceLocationArgument.getId(context, "sound");
-                            ItemStack itemStack = InstrumentMap.createCustom(soundLocation);
+                            ItemStack itemStack = InstrumentMap.createCustom(soundLocation, InstrumentMap.DEFAULT_DURATION, InstrumentMap.DEFAULT_RANGE);
                             return player.addItem(itemStack) ? Command.SINGLE_SUCCESS : 0;
                         })
+                        .then(argument("duration", IntegerArgumentType.integer(0))
+                                .executes(context -> {
+                                    CommandSourceStack source = context.getSource();
+                                    ServerPlayer player = source.getPlayerOrException();
+
+                                    ResourceLocation soundLocation = ResourceLocationArgument.getId(context, "sound");
+                                    int duration = IntegerArgumentType.getInteger(context, "duration");
+                                    ItemStack itemStack = InstrumentMap.createCustom(soundLocation, duration, InstrumentMap.DEFAULT_RANGE);
+                                    return player.addItem(itemStack) ? Command.SINGLE_SUCCESS : 0;
+                                })
+                                .then(argument("range", FloatArgumentType.floatArg(16))
+                                        .executes(context -> {
+                                            CommandSourceStack source = context.getSource();
+                                            ServerPlayer player = source.getPlayerOrException();
+
+                                            ResourceLocation soundLocation = ResourceLocationArgument.getId(context, "sound");
+                                            int duration = IntegerArgumentType.getInteger(context, "duration");
+                                            float range = FloatArgumentType.getFloat(context, "range");
+                                            ItemStack itemStack = InstrumentMap.createCustom(soundLocation, duration, range);
+                                            return player.addItem(itemStack) ? Command.SINGLE_SUCCESS : 0;
+                                        })
+                                )
+                        )
                 )
         );
     }

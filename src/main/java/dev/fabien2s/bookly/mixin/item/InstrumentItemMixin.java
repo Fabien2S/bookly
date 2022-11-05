@@ -3,7 +3,6 @@ package dev.fabien2s.bookly.mixin.item;
 import dev.fabien2s.bookly.util.InstrumentMap;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.Instrument;
 import net.minecraft.world.item.InstrumentItem;
@@ -22,13 +21,12 @@ public abstract class InstrumentItemMixin {
 
     @Inject(method = "getInstrument", at = @At("HEAD"), cancellable = true)
     private void use(ItemStack itemStack, CallbackInfoReturnable<Optional<Holder<Instrument>>> cir) {
-        ResourceLocation soundLocation = InstrumentMap.getCustomSound(itemStack);
-        if (soundLocation == null) {
-            return;
-        }
+        Instrument instrument = InstrumentMap.getInstrument(itemStack);
+        if (instrument == null) return;
 
-        Holder<Instrument> instrument = InstrumentMap.getInstrument(soundLocation);
-        cir.setReturnValue(Optional.of(instrument));
+        Holder.Direct<Instrument> instrumentDirect = new Holder.Direct<>(instrument);
+        Optional<Holder<Instrument>> optionalInstrument = Optional.of(instrumentDirect);
+        cir.setReturnValue(optionalInstrument);
     }
 
     @ModifyArgs(method = "play", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;playSound(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/sounds/SoundEvent;Lnet/minecraft/sounds/SoundSource;FF)V"))
