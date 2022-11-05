@@ -4,6 +4,8 @@
   "package": "dev.fabien2s.bookly.mixin",
   "compatibilityLevel": "JAVA_17",
   "server": [
+    "item.InstrumentItemMixin",
+    "level.ServerLevelMixin",
     "player.PlayerListMixin",
     "player.ServerPlayerMixin"
   ],
