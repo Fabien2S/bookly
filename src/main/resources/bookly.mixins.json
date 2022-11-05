@@ -4,8 +4,8 @@
   "package": "dev.fabien2s.bookly.mixin",
   "compatibilityLevel": "JAVA_17",
   "server": [
-    "PlayerListMixin",
-    "ServerPlayerMixin"
+    "player.PlayerListMixin",
+    "player.ServerPlayerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
