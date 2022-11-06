@@ -3,12 +3,6 @@
   "minVersion": "0.8",
   "package": "dev.fabien2s.bookly.mixin",
   "compatibilityLevel": "JAVA_17",
-  "client": [
-    "client.GameRendererMixin",
-    "entity.LocalPlayerAccessor",
-    "level.LevelRendererMixin",
-    "level.PlayerRendererMixin"
-  ],
   "mixins": [
     "entity.CreeperMixin",
     "item.InstrumentItemMixin",

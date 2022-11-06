@@ -3,6 +3,7 @@ package dev.fabien2s.bookly.mixin.item;
 import dev.fabien2s.bookly.util.InstrumentMap;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.Instrument;
 import net.minecraft.world.item.InstrumentItem;
@@ -20,20 +21,21 @@ import java.util.Optional;
 public abstract class InstrumentItemMixin {
 
     @Inject(method = "getInstrument", at = @At("HEAD"), cancellable = true)
-    private void use(ItemStack itemStack, CallbackInfoReturnable<Optional<Holder<Instrument>>> cir) {
+    private void getInstrument(ItemStack itemStack, CallbackInfoReturnable<Optional<Holder<Instrument>>> cir) {
         Instrument instrument = InstrumentMap.getInstrument(itemStack);
-        if (instrument == null) return;
-
-        Holder.Direct<Instrument> instrumentDirect = new Holder.Direct<>(instrument);
-        Optional<Holder<Instrument>> optionalInstrument = Optional.of(instrumentDirect);
-        cir.setReturnValue(optionalInstrument);
+        if (instrument != null) {
+            Holder.Direct<Instrument> instrumentDirect = new Holder.Direct<>(instrument);
+            cir.setReturnValue(Optional.of(instrumentDirect));
+        }
     }
 
     @ModifyArgs(method = "play", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;playSound(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/sounds/SoundEvent;Lnet/minecraft/sounds/SoundSource;FF)V"))
     private static void play(Args args) {
         SoundEvent soundEvent = args.get(2);
-        int id = Registry.SOUND_EVENT.getId(soundEvent);
-        if (id == -1) args.set(0, null);
+        ResourceLocation soundLocation = soundEvent.getLocation();
+        if (Registry.SOUND_EVENT.containsKey(soundLocation)) return;
+
+        args.set(0, null);
     }
 
 }
