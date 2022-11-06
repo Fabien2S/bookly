@@ -13,7 +13,7 @@
   },
   "license": "CC0-1.0",
   "icon": "assets/bookly/icon.png",
-  "environment": "*",
+  "environment": "server",
   "entrypoints": {
     "main": [
       "dev.fabien2s.bookly.BooklyMod"
