@@ -33,6 +33,8 @@ public final class InstrumentMap {
         if (itemStackTag == null) return null;
 
         String customSound = itemStackTag.getString(CUSTOM_SOUND_TAG);
+        if (customSound.isEmpty()) return null;
+
         ResourceLocation soundLocation = ResourceLocation.tryParse(customSound);
         if (soundLocation == null) return null;
 
