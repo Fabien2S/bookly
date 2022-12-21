@@ -1,6 +1,8 @@
 package dev.fabien2s.bookly.util;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
@@ -38,9 +40,9 @@ public final class InstrumentMap {
         ResourceLocation soundLocation = ResourceLocation.tryParse(customSound);
         if (soundLocation == null) return null;
 
-        int useDuration = DEFAULT_DURATION;
+        int duration = DEFAULT_DURATION;
         if (itemStackTag.contains(CUSTOM_DURATION_TAG, Tag.TAG_INT)) {
-            useDuration = itemStackTag.getInt(CUSTOM_DURATION_TAG);
+            duration = itemStackTag.getInt(CUSTOM_DURATION_TAG);
         }
 
         float range = DEFAULT_RANGE;
@@ -48,7 +50,9 @@ public final class InstrumentMap {
             range = itemStackTag.getFloat(CUSTOM_RANGE_TAG);
         }
 
-        return new Instrument(new SoundEvent(soundLocation), useDuration, range);
+        SoundEvent soundEvent = SoundEvent.createVariableRangeEvent(soundLocation);
+        Holder<SoundEvent> soundHolder = BuiltInRegistries.SOUND_EVENT.wrapAsHolder(soundEvent);
+        return new Instrument(soundHolder, duration, range);
     }
 
     public static ItemStack createCustom(ResourceLocation soundLocation, int duration, float range) {
@@ -56,9 +60,6 @@ public final class InstrumentMap {
 
         CompoundTag itemStackTag = itemStack.getOrCreateTag();
         {
-            // display as golden
-            itemStackTag.putInt("CustomModelData", 1);
-
             // set sound data
             String soundId = soundLocation.toString();
             itemStackTag.putString(CUSTOM_SOUND_TAG, soundId);
